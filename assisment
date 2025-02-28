@@ -1,0 +1,124 @@
+import React, { useState } from "react";
+
+const OTPVerification = () => {
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
+
+  const generateOtp = () => {
+    const newOtp = Math.floor(1000 + Math.random() * 9000).toString();
+    setGeneratedOtp(newOtp);
+    setOtp(["", "", "", ""]);
+    alert(`Your OTP is: ${newOtp}`);
+  };
+
+  const handleChange = (e, index) => {
+    const value = e.target.value;
+    if (/^\d?$/.test(value)) {
+      const newOtp = [...otp];
+      newOtp[index] = value;
+      setOtp(newOtp);
+
+      if (value && index < 3) {
+        document.getElementById(`otp-${index + 1}`).focus();
+      }
+    }
+  };
+
+  const handleSubmit = () => {
+    if (otp.join("") === generatedOtp) {
+      setIsVerified(true);
+    } else {
+      alert("Invalid OTP. Please try again.");
+    }
+  };
+
+  if (isVerified) {
+    return (
+      <div style={styles.successContainer}>
+        <h1>Welcome to the Home Page!</h1>
+        <p>You have successfully verified your OTP.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div style={styles.container}>
+      <h2>OTP Verification</h2>
+      <button style={styles.button} onClick={generateOtp}>
+        Get OTP
+      </button>
+      {generatedOtp && <p style={styles.otpText}>{generatedOtp}</p>}
+      <p>Please enter the OTP sent to your mobile:</p>
+      <div style={styles.otpContainer}>
+        {otp.map((value, index) => (
+          <input
+            key={index}
+            id={`otp-${index}`}
+            type="text"
+            maxLength="1"
+            value={value}
+            onChange={(e) => handleChange(e, index)}
+            style={styles.input}
+          />
+        ))}
+      </div>
+      <button style={styles.button} onClick={handleSubmit}>
+        Submit
+      </button>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    textAlign: "center",
+    padding: "20px",
+    background: "lightgreen",
+    borderRadius: "10px",
+    width: "300px",
+    margin: "auto",
+    marginTop: "50px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+  },
+  button: {
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    marginTop: "10px",
+  },
+  otpText: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    color: "black",
+  },
+  otpContainer: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px",
+    marginTop: "10px",
+  },
+  input: {
+    width: "40px",
+    height: "40px",
+    fontSize: "20px",
+    textAlign: "center",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+  },
+  successContainer: {
+    textAlign: "center",
+    padding: "20px",
+    background: "lightgreen",
+    borderRadius: "10px",
+    width: "400px",
+    margin: "auto",
+    marginTop: "50px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+  },
+};
+
+export default OTPVerification;
